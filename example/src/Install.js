@@ -3,16 +3,17 @@ import s from '@emotion/styled'
 import logo from './termilogo.png'
 import { Link } from "react-router-dom"
 
-const Use = () => {
+const Use = (props) => {
+  const { width, breakpoint } = props
   return (
-    <Wrapper>
+    <Wrapper width={width} breakpoint={breakpoint}>
       <Fork>
         <a href="https://github.com/nicholasglazer/termi" target="_blank" rel="noopener noreferrer">Fork me on Github</a>
       </Fork>
-      <div>
+      <TitleWrapper>
         <img src={logo} alt="logo" />
-        <Title>Termi</Title>
-      </div>
+        <Title width={width} breakpoint={breakpoint} >Termi</Title>
+      </TitleWrapper>
       <h2>Manipulate your website with react based web terminal</h2>
       <Terminal>
         <TerminalText>
@@ -38,6 +39,10 @@ display: flex;
 flex-direction: column;
 justify-content: space-between;
 align-items: center;
+img {
+width: ${props => props.width < props.breakpoint ? '64px' : '128px'};
+margin-right: 10px;
+}
 `
 const Footer = s.div`
 display: flex;
@@ -45,6 +50,7 @@ flex-direction: column;
 > div {
 margin-bottom: 20px;
 display: flex;
+flex-wrap: wrap;
   a {
     padding: 4px 4px 0 0;
   }
@@ -60,9 +66,14 @@ display: flex;
   }
 }
 `
+const TitleWrapper = s.div`
+display: flex;
+align-items: center;
+`
 const Title = s.h1`
-font-size: 36px;
+font-size: ${props => props.width < props.breakpoint ? '32px' : '60px'};
 text-align: center;
+margin: 0;
 `
 const Terminal = s.div`
 display: flex;
@@ -85,6 +96,7 @@ const Fork = s.div`
 align-self: flex-end;
 font-size: 18px;
 font-weight: 700;
+margin-bottom: 12px;
 > a {
 color: #1d1f21;
 }

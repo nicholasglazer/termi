@@ -16,13 +16,28 @@ const browserHistory = createBrowserHistory({forceRefresh: true})
 const routes = ['/', '/doc', '/about']
 
 export default function App() {
+  const useViewport = () => {
+    const [width, setWidth] = React.useState(window.innerWidth);
+
+    React.useEffect(() => {
+      const handleWindowResize = () => setWidth(window.innerWidth);
+      window.addEventListener("resize", handleWindowResize);
+      return () => window.removeEventListener("resize", handleWindowResize);
+    }, []);
+
+    // Return the width so we can use it in our components
+    return { width };
+  }
+
+  const { width } = useViewport()
+  const breakpoint = 768
   return (
     <Router history={browserHistory}>
-      <Wrapper>
+      <Wrapper breakpoint={breakpoint} width={width}>
         <Termi history={browserHistory} routes={routes} />
         <Switch>
           <Route exact path="/">
-            <Install />
+            <Install width={width} breakpoint={breakpoint}/>
           </Route>
           <Route path="/doc">
             <Doc />
@@ -60,9 +75,18 @@ const Wrapper = s.div`
  }
  background: #f5f6f7;
  display: flex;
+ flex-direction: ${props => props.width < props.breakpoint ? 'column' : 'row' };
  height: 100vh;
- > div {
+ > div:first-of-type {
    flex: 1;
    display: flex;
+   order: ${props => props.width < props.breakpoint ? '2' : '1'};
+   ${props => props.width < props.breakpoint ? 'max-height: 200px;' : ''}
+ }
+ > div:last-of-type {
+   flex: 1;
+   display: flex;
+   order: ${props => props.width < props.breakpoint ? '1' : '2'};
+   overflow: auto;
  }
 `
