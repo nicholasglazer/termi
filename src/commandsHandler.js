@@ -52,7 +52,7 @@ export function echo(arg) {
 export function whoami() {
   const [ip, setIp] = useState({})
   async function fetchUrl() {
-    const response = await fetch('http://www.geoplugin.net/json.gp')
+    const response = await fetch('https://www.geoplugin.net/json.gp')
     const json = await response.json()
     const data = {
       'ip': json.geoplugin_request,
